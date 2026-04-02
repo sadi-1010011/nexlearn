@@ -95,8 +95,21 @@ export const useExamStore = create<ExamState>()((set, get) => ({
     try {
       const res = await fetchQuestionsApi();
       if (res.success) {
+        // Map API response keys to the internal Question format
+        const formattedQuestions = res.questions?.map((q: any) => ({
+          id: q.question_id,
+          question_text: q.question, // Map 'question' to 'question_text'
+          question_image: q.image,   // Map 'image' to 'question_image'
+          paragraph: q.comprehension, // Map 'comprehension' to 'paragraph'
+          options: q.options?.map((opt: any) => ({
+            id: opt.id,
+            option_text: opt.option, // Map 'option' to 'option_text'
+            option_image: opt.image  // Map 'image' to 'option_image'
+          })) || []
+        })) || [];
+
         set({
-          questions: res.questions || [],
+          questions: formattedQuestions,
           questionsCount: res.questions_count || 0,
           totalMarks: res.total_marks || 0,
           totalTime: res.total_time || 0,

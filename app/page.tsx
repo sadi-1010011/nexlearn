@@ -89,7 +89,7 @@ export default function Home() {
         backgroundPosition: "center",
       }}
     >
-      <main className="w-full max-w-5xl flex flex-col md:flex-row overflow-hidden rounded-xl bg-linear-to-b from-[#1C3141] to-[#487EA7] min-h-[400px]">
+      <main className="w-full max-w-5xl flex flex-col md:flex-row md:p-2 overflow-hidden rounded-xl bg-linear-to-b from-primary to-[#487EA7] min-h-[400px]">
         {/* Left Section: NexLearn Brand */}
         <section className="hidden md:flex md:w-1/2 flex-col justify-between p-8 relative overflow-hidden">
           <div className="relative z-10">
@@ -102,7 +102,7 @@ export default function Home() {
         </section>
 
         {/* Right Section: Login Form */}
-        <section className="w-full md:w-1/2 bg-white flex flex-col justify-center p-8 m-3 rounded-xl md:p-16">
+        <section className="w-full md:w-1/2 bg-white flex flex-col justify-center p-8 rounded-xl md:p-16">
           {/* Mobile Logo (Visible only on small screens) */}
           <div className="md:hidden flex items-center gap-2 mb-12">
             <span
@@ -144,19 +144,25 @@ export default function Home() {
                     We use your mobile number to identify your account
                   </p>
                 </header>
-                <FloatingLabel
-                  className="text-black"
-                  variant="outlined"
-                  label="Phone number"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                />
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 z-10 pointer-events-none text-slate-500 pr-2 border-r border-slate-200">
+                    <span className="text-xl">🇮🇳</span>
+                    <span className="text-sm font-bold">+91</span>
+                  </div>
+                  <FloatingLabel
+                    className="pl-24 [&>label]:text-white"
+                    variant="outlined"
+                    label="Phone number"
+                    value={phone}
+                    onChange={(e) => setPhone(phone => phone.startsWith("+91") ? e.target.value : `+91${e.target.value}`)}
+                  />
+                </div>
                 <HelperText color="info">
                   By tapping Get started, you agree to the Terms & Conditions
                 </HelperText>
               </div>
               <button
-                className="w-full bg-[#0c1322] hover:bg-[#1c2639] text-white py-4 px-6 rounded-xl font-headline font-bold text-lg shadow-xl shadow-slate-200 transition-all active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full hover:bg-[#1c2639] text-white bg-primary py-4 px-6 rounded-xl font-headline font-bold text-lg shadow-xl shadow-slate-200 transition-all active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
                 type="submit"
                 disabled={loading || !phone.trim()}
               >
