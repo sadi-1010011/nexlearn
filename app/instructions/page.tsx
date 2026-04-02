@@ -50,15 +50,15 @@ export default function Instructions() {
             </div>
           </div>
         ) : (
-          <>
-            <p className="text-2xl my-4 font-medium">
+          <div className="w-[90%] flex flex-col items-center justify-center mx-auto">
+            <p className="text-2xl my-4 font-medium text-center">
               Ancient Indian History MCQ
             </p>
             <section
-              className="w-full max-w-2xl bg-[#1C3141] rounded-xl flex justify-around"
+              className="w-full max-w-2xl bg-[#1C3141] rounded-xl flex justify-around items-center py-4"
               data-purpose="score-summary"
             >
-              <div className="rounded-2xl p-8 text-center text-white shadow-xl">
+              <div className="rounded-2xl p-4 text-center text-white shadow-xl">
                 <p className="text-sm font-medium opacity-90 mb-2">
                   Total MCQs:
                 </p>
@@ -70,9 +70,9 @@ export default function Instructions() {
                 </h1>
               </div>
 
-              <div className="bg-gray-200 px-px rounded h-1/2 translate-y-4/8" />
+              <div className="w-px h-12 bg-gray-500 opacity-50 rounded" />
 
-              <div className="rounded-2xl p-8 text-center text-white shadow-xl">
+              <div className="rounded-2xl p-4 text-center text-white shadow-xl">
                 <p className="text-sm font-medium opacity-90 mb-2">
                   Total Marks:
                 </p>
@@ -84,9 +84,9 @@ export default function Instructions() {
                 </h1>
               </div>
 
-              <div className="bg-gray-200 px-px rounded h-1/2 translate-y-4/8" />
+              <div className="w-px h-12 bg-gray-500 opacity-50 rounded" />
 
-              <div className="rounded-2xl p-8 text-center text-white shadow-xl">
+              <div className="rounded-2xl p-4 text-center text-white shadow-xl">
                 <p className="text-sm font-medium opacity-90 mb-2">
                   Total Time:
                 </p>
@@ -148,7 +148,7 @@ export default function Instructions() {
                 Start Test
               </button>
             </div>
-          </>
+          </div>
         )}
       </div>
     </AuthGuard>

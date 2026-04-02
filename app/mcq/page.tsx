@@ -123,7 +123,7 @@ export default function Mcq() {
     <AuthGuard>
       <div className="flex flex-col min-h-screen">
         <Header />
-        <main className="grow bg-[#F4FCFF] p-4 lg:p-8 flex flex-col items-start lg:flex-row gap-8 overflow-auto">
+        <main className="grow bg-[#F4FCFF] p-4 lg:p-8 flex flex-col md:items-start items-center lg:flex-row gap-8 overflow-auto">
           {/* LeftColumn - Question Area */}
           <section
             className="lg:w-2/3 flex flex-col gap-6"

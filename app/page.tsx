@@ -29,30 +29,32 @@ export default function Home() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const [forceAddUser, setForceAddUser] = useState(false);
+
   // Derive which card to show from auth state
-  const activeCard = isNewUser ? "adduser" : otpSent ? "otp" : "login";
+  const activeCard = forceAddUser || isNewUser ? "adduser" : otpSent ? "otp" : "login";
 
   // If already authenticated, redirect to instructions
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && !forceAddUser) {
       router.replace("/instructions");
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, forceAddUser, router]);
 
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!phone.trim()) return;
-    await sendOtp(phone.trim());
+    const digits = phone.trim().replace(/\D/g, "");
+    if (!digits) return;
+    await sendOtp(`+91${digits}`);
   };
 
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!otp.trim()) return;
     const result = await verifyOtp(otp.trim());
-    if (result === "login") {
-      router.push("/instructions");
+    if (result !== "error") {
+      setForceAddUser(true);
     }
-    // If "new_user", the state change will switch to adduser card
   };
 
   const handleCreateProfile = async (e: React.FormEvent) => {
@@ -89,7 +91,7 @@ export default function Home() {
         backgroundPosition: "center",
       }}
     >
-      <main className="w-full max-w-5xl flex flex-col md:flex-row md:p-2 overflow-hidden rounded-xl bg-linear-to-b from-primary to-[#487EA7] min-h-[400px]">
+      <main className="w-[90%] mx-auto max-w-5xl flex flex-col md:flex-row md:p-2 overflow-hidden rounded-xl bg-linear-to-b from-primary to-[#487EA7] min-h-[400px]">
         {/* Left Section: NexLearn Brand */}
         <section className="hidden md:flex md:w-1/2 flex-col justify-between p-8 relative overflow-hidden">
           <div className="relative z-10">
@@ -102,7 +104,7 @@ export default function Home() {
         </section>
 
         {/* Right Section: Login Form */}
-        <section className="w-full md:w-1/2 bg-white flex flex-col justify-center p-8 rounded-xl md:p-16">
+        <section className="login-form-section w-full md:w-1/2 bg-white flex flex-col justify-center p-8 rounded-xl md:p-16">
           {/* Mobile Logo (Visible only on small screens) */}
           <div className="md:hidden flex items-center gap-2 mb-12">
             <span
@@ -147,14 +149,15 @@ export default function Home() {
                 <div className="relative">
                   <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 z-10 pointer-events-none text-slate-500 pr-2 border-r border-slate-200">
                     <span className="text-xl">🇮🇳</span>
-                    <span className="text-sm font-bold">+91</span>
+                    {/* <span className="text-sm font-bold">+91</span> */}
                   </div>
                   <FloatingLabel
-                    className="pl-24 [&>label]:text-white"
+                    className="pl-14 [&>label]:text-white dark:text-black"
                     variant="outlined"
                     label="Phone number"
+                    type="tel"
                     value={phone}
-                    onChange={(e) => setPhone(phone => phone.startsWith("+91") ? e.target.value : `+91${e.target.value}`)}
+                    onChange={(e) => setPhone(e.target.value)}
                   />
                 </div>
                 <HelperText color="info">
@@ -164,7 +167,7 @@ export default function Home() {
               <button
                 className="w-full hover:bg-[#1c2639] text-white bg-primary py-4 px-6 rounded-xl font-headline font-bold text-lg shadow-xl shadow-slate-200 transition-all active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
                 type="submit"
-                disabled={loading || !phone.trim()}
+                disabled={loading || phone.trim().replace(/\D/g, "").length < 6}
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -190,10 +193,11 @@ export default function Home() {
                     Enter the code we texted you
                   </h2>
                   <p className="text-slate-500 font-body text-md leading-relaxed">
-                    We&apos;ve sent an SMS to +91 {mobile}
+                    We&apos;ve sent an SMS to {mobile}
                   </p>
                 </header>
                 <FloatingLabel
+                  className="dark:text-black"
                   variant="outlined"
                   label="SMS code"
                   value={otp}
@@ -283,18 +287,21 @@ export default function Home() {
                   </div>
                 </div>
                 <FloatingLabel
+                  className="dark:text-black"
                   variant="outlined"
                   label="Name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
                 <FloatingLabel
+                  className="dark:text-black"
                   variant="outlined"
                   label="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <FloatingLabel
+                  className="dark:text-black"
                   variant="outlined"
                   label="Your Qualification"
                   value={qualification}
