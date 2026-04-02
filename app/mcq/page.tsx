@@ -7,6 +7,7 @@ import { Paragraph } from "@/components/Paragraph";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useExamStore } from "@/lib/stores/examStore";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Mcq() {
   const router = useRouter();
@@ -141,7 +142,15 @@ export default function Mcq() {
             </div>
 
             {/* Question Content Card */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6 flex flex-col gap-6 shadow-sm">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentIndex}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+                className="bg-white rounded-lg border border-gray-200 p-6 flex flex-col gap-6 shadow-sm"
+              >
               {/* Paragraph button */}
               {currentQuestion?.paragraph && (
                 <div className="flex">
@@ -175,12 +184,19 @@ export default function Mcq() {
                 <p className="text-xs text-gray-500 mb-4 italic">
                   Choose the answer:
                 </p>
-                <div className="space-y-3" data-purpose="options-list">
+                <motion.div
+                  initial="hidden"
+                  animate="show"
+                  variants={{ show: { transition: { staggerChildren: 0.1 } } }}
+                  className="space-y-3"
+                  data-purpose="options-list"
+                >
                   {currentQuestion?.options.map((option, idx) => {
                     const isSelected =
                       answers[currentQuestion.id] === option.id;
                     return (
-                      <label
+                      <motion.label
+                        variants={{ hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } }}
                         key={option.id}
                         className={`flex items-center justify-between p-4 border rounded-md cursor-pointer transition-colors group ${
                           isSelected
@@ -207,12 +223,13 @@ export default function Mcq() {
                             readOnly
                           />
                         </div>
-                      </label>
+                      </motion.label>
                     );
                   })}
-                </div>
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
+          </AnimatePresence>
 
             {/* Action Buttons */}
             <div
@@ -259,7 +276,10 @@ export default function Mcq() {
           </section>
 
           {/* RightColumn - Status Sheet */}
-          <aside
+          <motion.aside
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
             className="lg:w-1/3 flex flex-col bg-white rounded-lg border border-gray-200 p-6 shadow-sm h-fit sticky top-14"
             data-purpose="status-sidebar"
           >
@@ -378,7 +398,7 @@ export default function Mcq() {
             >
               Submit Test
             </button>
-          </aside>
+          </motion.aside>
         </main>
 
         {/* Submit Confirmation Modal */}

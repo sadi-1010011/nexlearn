@@ -4,6 +4,7 @@ import { FloatingLabel, HelperText } from "flowbite-react";
 import { useRouter } from "next/navigation";
 import { useRef, useState, useEffect } from "react";
 import { useAuthStore } from "@/lib/stores/authStore";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Home() {
   const router = useRouter();
@@ -91,7 +92,12 @@ export default function Home() {
         backgroundPosition: "center",
       }}
     >
-      <main className="w-[90%] mx-auto max-w-5xl flex flex-col md:flex-row md:p-2 overflow-hidden rounded-xl bg-linear-to-b from-primary to-[#487EA7] min-h-[400px]">
+      <motion.main
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="w-[90%] mx-auto max-w-5xl flex flex-col md:flex-row md:p-2 overflow-hidden rounded-xl bg-linear-to-b from-primary to-[#487EA7] min-h-[400px]"
+      >
         {/* Left Section: NexLearn Brand */}
         <section className="hidden md:flex md:w-1/2 flex-col justify-between p-8 relative overflow-hidden">
           <div className="relative z-10">
@@ -131,13 +137,21 @@ export default function Home() {
             </div>
           )}
 
-          {/* ─── Login Card ─── */}
-          {activeCard === "login" ? (
-            <form
-              className="max-w-sm mx-auto w-full flex flex-col gap-6 justify-between h-full"
-              onSubmit={handleSendOtp}
-            >
-              <div className="space-y-6">
+          {/* ─── Container for animated transition ─── */}
+          <div className="relative grow flex flex-col justify-center min-h-[350px]">
+            <AnimatePresence mode="wait">
+              {/* ─── Login Card ─── */}
+              {activeCard === "login" && (
+                <motion.form
+                  key="login"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  transition={{ duration: 0.3 }}
+                  className="max-w-sm mx-auto w-full flex flex-col gap-6 justify-between h-full"
+                  onSubmit={handleSendOtp}
+                >
+                  <div className="space-y-6">
                 <header className="mb-5">
                   <h2 className="text-[#0c1322] font-headline font-semibold text-3xl mb-3 tracking-tight">
                     Enter your phone number
@@ -164,8 +178,10 @@ export default function Home() {
                   By tapping Get started, you agree to the Terms & Conditions
                 </HelperText>
               </div>
-              <button
-                className="w-full hover:bg-[#1c2639] text-white bg-primary py-4 px-6 rounded-xl font-headline font-bold text-lg shadow-xl shadow-slate-200 transition-all active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full hover:bg-[#1c2639] text-white bg-primary py-4 px-6 rounded-xl font-headline font-bold text-lg shadow-xl shadow-slate-200 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                 type="submit"
                 disabled={loading || phone.trim().replace(/\D/g, "").length < 6}
               >
@@ -177,17 +193,22 @@ export default function Home() {
                 ) : (
                   "Get Started"
                 )}
-              </button>
-            </form>
-          ) : null}
+              </motion.button>
+            </motion.form>
+          )}
 
-          {/* ─── OTP Card ─── */}
-          {activeCard === "otp" ? (
-            <form
-              className="max-w-sm mx-auto w-full flex flex-col gap-6 justify-between h-full"
-              onSubmit={handleVerifyOtp}
-            >
-              <div className="space-y-6">
+              {/* ─── OTP Card ─── */}
+              {activeCard === "otp" && (
+                <motion.form
+                  key="otp"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  transition={{ duration: 0.3 }}
+                  className="max-w-sm mx-auto w-full flex flex-col gap-6 justify-between h-full"
+                  onSubmit={handleVerifyOtp}
+                >
+                  <div className="space-y-6">
                 <header className="mb-5">
                   <h2 className="text-[#0c1322] font-headline font-semibold text-3xl mb-3 tracking-tight">
                     Enter the code we texted you
@@ -218,8 +239,10 @@ export default function Home() {
                   </button>
                 </div>
               </div>
-              <button
-                className="w-full bg-[#0c1322] hover:bg-[#1c2639] text-white py-4 px-6 rounded-xl font-headline font-bold text-lg shadow-xl shadow-slate-200 transition-all active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full bg-[#0c1322] hover:bg-[#1c2639] text-white py-4 px-6 rounded-xl font-headline font-bold text-lg shadow-xl shadow-slate-200 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                 type="submit"
                 disabled={loading || !otp.trim()}
               >
@@ -231,17 +254,22 @@ export default function Home() {
                 ) : (
                   "Verify OTP"
                 )}
-              </button>
-            </form>
-          ) : null}
+              </motion.button>
+            </motion.form>
+          )}
 
-          {/* ─── Create Profile Card ─── */}
-          {activeCard === "adduser" ? (
-            <form
-              className="max-w-sm mx-auto w-full flex flex-col gap-6 justify-between h-full"
-              onSubmit={handleCreateProfile}
-            >
-              <div className="space-y-6">
+              {/* ─── Create Profile Card ─── */}
+              {activeCard === "adduser" && (
+                <motion.form
+                  key="adduser"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  transition={{ duration: 0.3 }}
+                  className="max-w-sm mx-auto w-full flex flex-col gap-6 justify-between h-full"
+                  onSubmit={handleCreateProfile}
+                >
+                  <div className="space-y-6">
                 <header className="mb-5">
                   <h2 className="text-[#0c1322] font-headline font-semibold text-3xl mb-3 tracking-tight">
                     Add Your Details
@@ -308,8 +336,10 @@ export default function Home() {
                   onChange={(e) => setQualification(e.target.value)}
                 />
               </div>
-              <button
-                className="w-full bg-[#0c1322] hover:bg-[#1c2639] text-white py-3 px-6 rounded-xl font-headline font-bold text-lg shadow-xl shadow-slate-200 transition-all active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full bg-[#0c1322] hover:bg-[#1c2639] text-white py-3 px-6 rounded-xl font-headline font-bold text-lg shadow-xl shadow-slate-200 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                 type="submit"
                 disabled={
                   loading ||
@@ -327,11 +357,13 @@ export default function Home() {
                 ) : (
                   "Get Started"
                 )}
-              </button>
-            </form>
-          ) : null}
+              </motion.button>
+            </motion.form>
+          )}
+            </AnimatePresence>
+          </div>
         </section>
-      </main>
+      </motion.main>
     </div>
   );
 }

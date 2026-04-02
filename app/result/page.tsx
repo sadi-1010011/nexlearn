@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import AuthGuard from "@/components/AuthGuard";
 import { useRouter } from "next/navigation";
 import { useExamStore } from "@/lib/stores/examStore";
+import { motion } from "framer-motion";
 
 export default function Result() {
   const router = useRouter();
@@ -26,7 +27,12 @@ export default function Result() {
         <main className="grow flex flex-col items-center justify-start pt-12 px-4 pb-20">
           {/* ScoreCard */}
           <section className="w-full max-w-md" data-purpose="score-summary">
-            <div className="score-card-gradient rounded-2xl p-8 text-center text-white shadow-xl mb-8">
+            <motion.div
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 260, damping: 20 }}
+              className="score-card-gradient rounded-2xl p-8 text-center text-white shadow-xl mb-8"
+            >
               <p className="text-sm font-medium opacity-90 mb-2">
                 Marks Obtained:
               </p>
@@ -42,16 +48,20 @@ export default function Result() {
                   {new Date(examResult.submitted_at).toLocaleString()}
                 </p>
               )}
-            </div>
+            </motion.div>
           </section>
 
           {/* StatisticsList */}
-          <section
+          <motion.section
+            initial="hidden"
+            animate="show"
+            variants={{ show: { transition: { staggerChildren: 0.1, delayChildren: 0.3 } } }}
             className="w-full max-w-md space-y-4 px-2"
             data-purpose="statistics-breakdown"
           >
             {/* Total Questions */}
-            <div
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } }}
               className="flex items-center justify-between py-1"
               data-purpose="stat-row"
             >
@@ -79,10 +89,11 @@ export default function Result() {
               <span className="text-xl font-bold text-slate-800">
                 {String(questionsCount).padStart(3, "0")}
               </span>
-            </div>
+            </motion.div>
 
             {/* Correct Answers */}
-            <div
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } }}
               className="flex items-center justify-between py-1"
               data-purpose="stat-row"
             >
@@ -110,10 +121,11 @@ export default function Result() {
               <span className="text-xl font-bold text-slate-800">
                 {String(correct).padStart(3, "0")}
               </span>
-            </div>
+            </motion.div>
 
             {/* Incorrect Answers */}
-            <div
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } }}
               className="flex items-center justify-between py-1"
               data-purpose="stat-row"
             >
@@ -141,10 +153,11 @@ export default function Result() {
               <span className="text-xl font-bold text-slate-800">
                 {String(wrong).padStart(3, "0")}
               </span>
-            </div>
+            </motion.div>
 
             {/* Not Attended Questions */}
-            <div
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } }}
               className="flex items-center justify-between py-1"
               data-purpose="stat-row"
             >
@@ -172,18 +185,20 @@ export default function Result() {
               <span className="text-xl font-bold text-slate-800">
                 {String(notAttended).padStart(3, "0")}
               </span>
-            </div>
-          </section>
+            </motion.div>
+          </motion.section>
 
           {/* ActionButton */}
           <div className="w-full max-w-md mt-10" data-purpose="footer-actions">
-            <button
-              className="w-full bg-[#1e293b] hover:bg-[#0f172a] text-white py-4 rounded-lg font-bold text-lg shadow-lg transition-all transform active:scale-[0.98]"
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full bg-[#1e293b] hover:bg-[#0f172a] text-white py-4 rounded-lg font-bold text-lg shadow-lg transition-colors"
               data-purpose="done-button"
               onClick={handleDone}
             >
               Done
-            </button>
+            </motion.button>
           </div>
         </main>
       </div>

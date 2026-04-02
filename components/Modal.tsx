@@ -1,6 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface SubmitModalProps {
   isOpen: boolean;
@@ -28,13 +29,20 @@ export default function SubmitModal({
   return (
     <>
       {/* Backdrop */}
-      <div
-        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity"
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
         onClick={onClose}
       />
 
       {/* Modal */}
-      <div className="fixed max-w-md w-[calc(100%-2rem)] p-6 rounded-2xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white flex flex-col items-center justify-center z-50 shadow-2xl">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, x: "-50%", y: "-50%" }}
+        animate={{ opacity: 1, scale: 1, x: "-50%", y: "-50%" }}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+        className="fixed max-w-md w-[calc(100%-2rem)] p-6 rounded-2xl top-1/2 left-1/2 bg-white flex flex-col items-center justify-center z-50 shadow-2xl"
+      >
         <p className="text-xl my-2 font-medium text-black text-left w-full">
           Are you sure you want to submit the test?
         </p>
@@ -194,7 +202,7 @@ export default function SubmitModal({
             )}
           </button>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 }

@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+
 interface ParagraphProps {
   isOpen: boolean;
   onClose: () => void;
@@ -10,13 +12,20 @@ export function Paragraph({ isOpen, onClose, content }: ParagraphProps) {
   return (
     <>
       {/* Backdrop */}
-      <div
-        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity"
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
         onClick={onClose}
       />
 
       {/* Modal */}
-      <div className="fixed max-w-[80%] w-full p-6 rounded-2xl max-h-[80vh] overflow-y-auto top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white flex flex-col items-center justify-center z-50 shadow-2xl">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, x: "-50%", y: "-50%" }}
+        animate={{ opacity: 1, scale: 1, x: "-50%", y: "-50%" }}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+        className="fixed max-w-[80%] w-full p-6 rounded-2xl max-h-[80vh] overflow-y-auto top-1/2 left-1/2 bg-white flex flex-col items-center justify-center z-50 shadow-2xl"
+      >
         <p className="text-xl my-2 font-medium text-black text-left w-full">
           Comprehensive Paragraph
         </p>
@@ -39,7 +48,7 @@ export function Paragraph({ isOpen, onClose, content }: ParagraphProps) {
             Minimize
           </button>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 }

@@ -5,6 +5,7 @@ import AuthGuard from "@/components/AuthGuard";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useExamStore } from "@/lib/stores/examStore";
+import { motion } from "framer-motion";
 
 export default function Instructions() {
   const router = useRouter();
@@ -50,7 +51,12 @@ export default function Instructions() {
             </div>
           </div>
         ) : (
-          <div className="w-[90%] flex flex-col items-center justify-center mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="w-[90%] flex flex-col items-center justify-center mx-auto"
+          >
             <p className="text-2xl my-4 font-medium text-center">
               Ancient Indian History MCQ
             </p>
@@ -58,7 +64,12 @@ export default function Instructions() {
               className="w-full max-w-2xl bg-[#1C3141] rounded-xl flex justify-around items-center py-4"
               data-purpose="score-summary"
             >
-              <div className="rounded-2xl p-4 text-center text-white shadow-xl">
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.1, duration: 0.4 }}
+                className="rounded-2xl p-4 text-center text-white shadow-xl"
+              >
                 <p className="text-sm font-medium opacity-90 mb-2">
                   Total MCQs:
                 </p>
@@ -68,11 +79,16 @@ export default function Instructions() {
                 >
                   {questionsCount}
                 </h1>
-              </div>
+              </motion.div>
 
               <div className="w-px h-12 bg-gray-500 opacity-50 rounded" />
 
-              <div className="rounded-2xl p-4 text-center text-white shadow-xl">
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.4 }}
+                className="rounded-2xl p-4 text-center text-white shadow-xl"
+              >
                 <p className="text-sm font-medium opacity-90 mb-2">
                   Total Marks:
                 </p>
@@ -82,11 +98,16 @@ export default function Instructions() {
                 >
                   {totalMarks}
                 </h1>
-              </div>
+              </motion.div>
 
               <div className="w-px h-12 bg-gray-500 opacity-50 rounded" />
 
-              <div className="rounded-2xl p-4 text-center text-white shadow-xl">
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.4 }}
+                className="rounded-2xl p-4 text-center text-white shadow-xl"
+              >
                 <p className="text-sm font-medium opacity-90 mb-2">
                   Total Time:
                 </p>
@@ -96,7 +117,7 @@ export default function Instructions() {
                 >
                   {formatTime(totalTime)}
                 </h1>
-              </div>
+              </motion.div>
             </section>
 
             <section className="self-center max-w-2xl px-4">
@@ -107,48 +128,50 @@ export default function Instructions() {
                   dangerouslySetInnerHTML={{ __html: instruction }}
                 />
               ) : (
-                <ol className="list-decimal list-inside space-y-2 text-slate-700">
-                  <li>Complete the test within the given time.</li>
-                  <li>
-                    Test consists of {questionsCount} multiple-choice questions.
-                  </li>
-                  <li>
-                    Ensure you are in a quiet environment and have a stable
-                    internet connection.
-                  </li>
-                  <li>
-                    Keep an eye on the timer, and try to answer all questions
-                    within the given time.
-                  </li>
-                  <li>
-                    Do not use any external resources such as dictionaries,
-                    websites, or assistance.
-                  </li>
-                  <li>
-                    Complete the test honestly to accurately assess your
-                    proficiency level.
-                  </li>
-                  <li>Check answers before submitting.</li>
-                  <li>
-                    Your test results will be displayed immediately after
-                    submission.
-                  </li>
-                </ol>
+                <motion.ol
+                  initial="hidden"
+                  animate="show"
+                  variants={{ show: { transition: { staggerChildren: 0.1 } } }}
+                  className="list-decimal list-inside space-y-2 text-slate-700"
+                >
+                  {[
+                    `Complete the test within the given time.`,
+                    `Test consists of ${questionsCount} multiple-choice questions.`,
+                    `Ensure you are in a quiet environment and have a stable internet connection.`,
+                    `Keep an eye on the timer, and try to answer all questions within the given time.`,
+                    `Do not use any external resources such as dictionaries, websites, or assistance.`,
+                    `Complete the test honestly to accurately assess your proficiency level.`,
+                    `Check answers before submitting.`,
+                    `Your test results will be displayed immediately after submission.`
+                  ].map((text, i) => (
+                    <motion.li
+                      key={i}
+                      variants={{ hidden: { opacity: 0, x: -10 }, show: { opacity: 1, x: 0 } }}
+                    >
+                      {text}
+                    </motion.li>
+                  ))}
+                </motion.ol>
               )}
             </section>
 
             {/* ActionButton */}
             <div className="w-full max-w-sm mt-10 mb-8 px-4" data-purpose="footer-actions">
-              <button
-                className="w-full bg-[#1e293b] hover:bg-[#0f172a] text-white py-3 rounded-lg font-bold text-lg shadow-lg transition-all transform active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
+              <motion.button
+                whileHover={{ scale: questions.length === 0 ? 1 : 1.02 }}
+                whileTap={{ scale: questions.length === 0 ? 1 : 0.98 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="w-full bg-[#1e293b] hover:bg-[#0f172a] text-white py-3 rounded-lg font-bold text-lg shadow-lg transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                 data-purpose="done-button"
                 disabled={questions.length === 0}
                 onClick={handleStartTest}
               >
                 Start Test
-              </button>
+              </motion.button>
             </div>
-          </div>
+          </motion.div>
         )}
       </div>
     </AuthGuard>
